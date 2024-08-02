@@ -1,0 +1,24 @@
+Brief Report:
+
+Several crucial factors and design decisions were taken into account when creating the user management and matchmaking system to guarantee efficient functionality and performance:
+
+    1. Data Schema Modification: In order to overcome the SQL database's restriction with Array data types, the interests column in the users table was converted to a comma-separated string format. This change maintains effective user interest storage and retrieval while remaining compatible with the current database.
+    2. Endpoint Configuration:
+        Endpoints for Users:
+            Update User: Uses user_id to allow changes to user information.
+            Delete User: Enables a user to be deleted using their user_id from the database.
+            Matchmaking: Assists in locating possible matches by using the user's profile, which includes information on gender, age range, and shared interests.
+        Email validation: To improve data integrity, Pydantic's EmailStr was used to make sure email addresses are in a valid format before storing or processing user data.
+    3. Logic of Match Making: 
+        Based on shared interests, age range, and gender, profiles are matched:
+            Gender: When matching, only profiles with the opposite gender are taken into account.
+            Age Range: The user's age is the range of ±5 years in which matches are sought after.
+            Common Interests: For a profile to be considered a match, there must be a minimum of one shared interest.
+        Based on the user's preferences and profile details, this method guarantees that matches are pertinent and significant.
+
+Assumptions Made:
+    1. Presumed that Array data types are not supported by the SQL database, so the interests must be entered in a comma-separated string format.
+    2. Given that age and interests are essential for precise matchmaking, it is assumed that user profiles will contain accurate and consistent information.
+    3. All interests were converted to lowercase for matching since it was assumed that interests are comparable in a case-insensitive way.
+    4. It is assumed that, despite differences in capitalization, gender data will be consistently represented in the database as either "male" or "female".
+    5. Assumed that, in order to find relevant matches while maintaining inclusivity and relevance, an age range of ±5 years is appropriate.
